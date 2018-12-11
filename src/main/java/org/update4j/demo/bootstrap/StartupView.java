@@ -88,7 +88,7 @@ public class StartupView extends FXMLView implements UpdateHandler {
 
 	public StartupView(Configuration config) {
 		this.config = config;
-		
+
 		image.setImage(JavaFxDelegate.inverted);
 
 		primaryPercent = new SimpleDoubleProperty(this, "primaryPercent");
@@ -125,14 +125,14 @@ public class StartupView extends FXMLView implements UpdateHandler {
 
 		TextSeparator launchSeparator = new TextSeparator("Launch");
 		launchContainer.add(launchSeparator, 0, 0, GridPane.REMAINING, 1);
-		
+
 		TextSeparator updateSeparator = new TextSeparator("Update");
 		updateContainer.add(updateSeparator, 0, 0, GridPane.REMAINING, 1);
 	}
 
 	@FXML
 	void launchPressed(ActionEvent event) {
-		var checkUpdates = checkUpdates();
+		Task<Boolean> checkUpdates = checkUpdates();
 
 		checkUpdates.setOnSucceeded(evt -> {
 			List<String> args = new ArrayList<>();
@@ -177,13 +177,13 @@ public class StartupView extends FXMLView implements UpdateHandler {
 
 		status.setText("Checking for updates...");
 
-		var checkUpdates = checkUpdates();
+		Task<Boolean> checkUpdates = checkUpdates();
 		checkUpdates.setOnSucceeded(evt -> {
 			if (!checkUpdates.getValue()) {
 				status.setText("No updates found");
 				running.set(false);
 			} else {
-				var doUpdate = new Task<>() {
+				Task<Void> doUpdate = new Task<>() {
 
 					@Override
 					protected Void call() throws Exception {
@@ -213,7 +213,7 @@ public class StartupView extends FXMLView implements UpdateHandler {
 	}
 
 	private void run(Runnable runnable) {
-		var runner = new Thread(runnable);
+		Thread runner = new Thread(runnable);
 		runner.setDaemon(true);
 		runner.start();
 	}
@@ -234,7 +234,7 @@ public class StartupView extends FXMLView implements UpdateHandler {
 	}
 
 	@Override
-	public void updateDownloadProgress(float frac) throws InterruptedException {
+	public void updateDownloadProgress(float frac) {
 		Platform.runLater(() -> primaryPercent.set(frac));
 	}
 

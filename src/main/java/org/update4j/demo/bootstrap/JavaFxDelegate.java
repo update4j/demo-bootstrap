@@ -43,7 +43,7 @@ public class JavaFxDelegate extends Application implements Delegate {
 						.map(s -> ("/icons/update4j-icon-" + s + ".png"))
 						.map(s -> getClass().getResource(s).toExternalForm())
 						.map(Image::new)
-						.collect(Collectors.toUnmodifiableList());
+						.collect(Collectors.toList());
 		inverted = new Image("/icons/update4j-icon-invert.png");
 	}
 
