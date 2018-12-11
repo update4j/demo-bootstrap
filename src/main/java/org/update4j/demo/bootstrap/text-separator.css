@@ -1,0 +1,9 @@
+
+.text-separator {
+	-fx-padding: 10.0;
+}
+
+.text-separator .line {
+	-fx-background-color: secondary-light-color;
+	-fx-max-height: 3.0;
+}
