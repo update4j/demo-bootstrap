@@ -1,14 +1,15 @@
 package org.update4j.demo.bootstrap;
 
+import java.io.InputStreamReader;
 import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.update4j.Configuration;
 import org.update4j.service.Delegate;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -65,9 +66,9 @@ public class JavaFxDelegate extends Application implements Delegate {
 		primaryStage.setMinWidth(650);
 		primaryStage.setMinHeight(500);
 
-		Path configPath = Paths.get("config.xml");
+		URL configUrl = new URL("http://docs.update4j.org/demo/business/config.xml");
 		Configuration config = null;
-		try (Reader in = Files.newBufferedReader(configPath)) {
+		try (Reader in = new InputStreamReader(configUrl.openStream(), StandardCharsets.UTF_8)) {
 			config = Configuration.read(in);
 		}
 
