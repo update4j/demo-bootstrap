@@ -1,13 +1,9 @@
 package org.update4j.demo.bootstrap;
 
-
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.update4j.Configuration;
 import org.update4j.FileMetadata;
-import org.update4j.UpdateContext;
+import org.update4j.inject.InjectSource;
+import org.update4j.inject.Injectable;
 import org.update4j.service.UpdateHandler;
 
 import javafx.animation.FadeTransition;
@@ -28,14 +24,16 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.SVGPath;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class StartupView extends FXMLView implements UpdateHandler {
+public class StartupView extends FXMLView implements UpdateHandler, Injectable {
 
 	private Configuration config;
 
@@ -49,9 +47,6 @@ public class StartupView extends FXMLView implements UpdateHandler {
 	private GridPane launchContainer;
 
 	@FXML
-	private GridPane updateContainer;
-
-	@FXML
 	private CheckBox singleInstanceCheckbox;
 
 	@FXML
@@ -59,6 +54,9 @@ public class StartupView extends FXMLView implements UpdateHandler {
 
 	@FXML
 	private CheckBox newWindowCheckbox;
+
+	@FXML
+	private GridPane updateContainer;
 
 	@FXML
 	private Pane primary;
@@ -87,9 +85,16 @@ public class StartupView extends FXMLView implements UpdateHandler {
 	private BooleanProperty running;
 	private volatile boolean abort;
 
-	public StartupView(Configuration config) {
+	private Injector injector;
+	
+	public StartupView(Configuration config, Injector injector) {
 		this.config = config;
+		this.injector = injector;
 
+		injector.singleInstanceCheckbox = singleInstanceCheckbox;
+		injector.singleInstanceMessage = singleInstanceMessage;
+		injector.newWindowCheckbox = newWindowCheckbox;
+		
 		image.setImage(JavaFxDelegate.inverted);
 
 		primaryPercent = new SimpleDoubleProperty(this, "primaryPercent");
@@ -114,7 +119,6 @@ public class StartupView extends FXMLView implements UpdateHandler {
 				secondaryPercent.set(0);
 			}
 		});
-		update.textProperty().bind(Bindings.when(running).then("Abort").otherwise("Update"));
 
 		primary.visibleProperty().bind(running);
 		secondary.visibleProperty().bind(primary.visibleProperty());
@@ -136,15 +140,10 @@ public class StartupView extends FXMLView implements UpdateHandler {
 		Task<Boolean> checkUpdates = checkUpdates();
 
 		checkUpdates.setOnSucceeded(evt -> {
-			List<String> args = new ArrayList<>();
-			args.add(singleInstanceCheckbox.isSelected() + "");
-			args.add(singleInstanceMessage.getText());
-			args.add(newWindowCheckbox.isSelected() + "");
-
 			Thread run = new Thread(() -> {
-				config.launch(args);
+				config.launch(injector);
 				if (newWindowCheckbox.isSelected()) {
-					Platform.runLater(() -> JavaFxDelegate.getPrimaryStage().hide());
+					Platform.runLater(() -> injector.primaryStage.hide());
 				}
 			});
 
@@ -188,7 +187,7 @@ public class StartupView extends FXMLView implements UpdateHandler {
 
 					@Override
 					protected Void call() throws Exception {
-						config.update(StartupView.this);
+						config.update((UpdateHandler) StartupView.this);
 
 						return null;
 					}
@@ -258,68 +257,6 @@ public class StartupView extends FXMLView implements UpdateHandler {
 	public void stop() {
 		Platform.runLater(() -> running.set(false));
 		abort = false;
-	}
-
-	/*
-	 * Unimplemented
-	 */
-
-	@Override
-	public long version() {
-		return 0;
-	}
-
-	@Override
-	public void init(UpdateContext context) {
-
-	}
-
-	@Override
-	public void startCheckUpdates() {
-	}
-
-	@Override
-	public void startCheckUpdateFile(FileMetadata file) {
-
-	}
-
-	@Override
-	public void doneCheckUpdateFile(FileMetadata file, boolean requires) {
-
-	}
-
-	@Override
-	public void updateCheckUpdatesProgress(float frac) {
-	}
-
-	@Override
-	public void doneCheckUpdates() {
-
-	}
-
-	@Override
-	public void startDownloads() {
-
-	}
-
-	@Override
-	public void startDownloadFile(FileMetadata file) {
-
-	}
-
-	@Override
-	public void validatingFile(FileMetadata file, Path tempFile) {
-
-	}
-
-	@Override
-	public void doneDownloadFile(FileMetadata file, Path tempFile) {
-
-	}
-
-	@Override
-	public void doneDownloads() {
-
 	}
 
 }

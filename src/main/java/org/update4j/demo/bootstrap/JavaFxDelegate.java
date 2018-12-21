@@ -1,9 +1,12 @@
 package org.update4j.demo.bootstrap;
 
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,34 +51,30 @@ public class JavaFxDelegate extends Application implements Delegate {
 		inverted = new Image("/icons/update4j-icon-invert.png");
 	}
 
-	private static Stage primary;
-
-	public static Stage getPrimaryStage() {
-		return primary;
-	}
-
-	private static ViewStack stack;
-
-	public static ViewStack getViewStack() {
-		return stack;
-	}
-
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		primary = primaryStage;
+		Injector injector = new Injector();
+		injector.primaryStage = primaryStage;
+		injector.inverted = inverted;
+		
 		primaryStage.setMinWidth(650);
 		primaryStage.setMinHeight(500);
 
+		
 		URL configUrl = new URL("http://docs.update4j.org/demo/business/config.xml");
 		Configuration config = null;
 		try (Reader in = new InputStreamReader(configUrl.openStream(), StandardCharsets.UTF_8)) {
 			config = Configuration.read(in);
+		} catch (IOException e) {
+			System.err.println("Could not load remote config, falling back to local.");
+			try(Reader in = Files.newBufferedReader(Paths.get("business/config.xml"))) {
+				config = Configuration.read(in);
+			}
 		}
 
-		StartupView startup = new StartupView(config);
+		StartupView startup = new StartupView(config, injector);
 
-		stack = new ViewStack(startup);
-		Scene scene = new Scene(stack);
+		Scene scene = new Scene(startup);
 		scene.getStylesheets().add(getClass().getResource("root.css").toExternalForm());
 
 		primaryStage.getIcons().addAll(images);
