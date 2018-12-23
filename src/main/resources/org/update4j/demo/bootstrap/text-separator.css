@@ -1,6 +1,9 @@
 
 .text-separator {
 	-fx-padding: 10.0;
+}
+
+.text-separator .label {
 	-fx-font-family: Roboto;
 	-fx-text-fill: #757575;
 }

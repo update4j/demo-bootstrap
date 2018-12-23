@@ -8,7 +8,6 @@ import org.update4j.service.UpdateHandler;
 
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -47,12 +46,15 @@ public class StartupView extends FXMLView implements UpdateHandler, Injectable {
 	private GridPane launchContainer;
 
 	@FXML
+	@InjectSource
 	private CheckBox singleInstanceCheckbox;
 
 	@FXML
+	@InjectSource
 	private TextField singleInstanceMessage;
 
 	@FXML
+	@InjectSource
 	private CheckBox newWindowCheckbox;
 
 	@FXML
@@ -85,15 +87,15 @@ public class StartupView extends FXMLView implements UpdateHandler, Injectable {
 	private BooleanProperty running;
 	private volatile boolean abort;
 
-	private Injector injector;
+	@InjectSource
+	private Stage primaryStage;
 	
-	public StartupView(Configuration config, Injector injector) {
+	@InjectSource
+	private Image inverted = JavaFxDelegate.inverted;
+	
+	public StartupView(Configuration config, Stage primaryStage) {
 		this.config = config;
-		this.injector = injector;
-
-		injector.singleInstanceCheckbox = singleInstanceCheckbox;
-		injector.singleInstanceMessage = singleInstanceMessage;
-		injector.newWindowCheckbox = newWindowCheckbox;
+		this.primaryStage = primaryStage;
 		
 		image.setImage(JavaFxDelegate.inverted);
 
@@ -141,9 +143,9 @@ public class StartupView extends FXMLView implements UpdateHandler, Injectable {
 
 		checkUpdates.setOnSucceeded(evt -> {
 			Thread run = new Thread(() -> {
-				config.launch(injector);
+				config.launch(this);
 				if (newWindowCheckbox.isSelected()) {
-					Platform.runLater(() -> injector.primaryStage.hide());
+					Platform.runLater(() -> primaryStage.hide());
 				}
 			});
 

@@ -52,11 +52,7 @@ public class JavaFxDelegate extends Application implements Delegate {
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {
-		Injector injector = new Injector();
-		injector.primaryStage = primaryStage;
-		injector.inverted = inverted;
-		
+	public void start(Stage primaryStage) throws Exception {		
 		primaryStage.setMinWidth(650);
 		primaryStage.setMinHeight(500);
 
@@ -72,7 +68,7 @@ public class JavaFxDelegate extends Application implements Delegate {
 			}
 		}
 
-		StartupView startup = new StartupView(config, injector);
+		StartupView startup = new StartupView(config, primaryStage);
 
 		Scene scene = new Scene(startup);
 		scene.getStylesheets().add(getClass().getResource("root.css").toExternalForm());
