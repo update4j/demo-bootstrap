@@ -144,9 +144,6 @@ public class StartupView extends FXMLView implements UpdateHandler, Injectable {
 		checkUpdates.setOnSucceeded(evt -> {
 			Thread run = new Thread(() -> {
 				config.launch(this);
-				if (newWindowCheckbox.isSelected()) {
-					Platform.runLater(() -> primaryStage.hide());
-				}
 			});
 
 			//FIXME: add opt-out checkbox
