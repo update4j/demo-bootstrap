@@ -33,7 +33,7 @@ public class CreateConfig {
 						
 						.property("default.launcher.main.class", "org.update4j.Bootstrap")
 						.property("maven.central", MAVEN_BASE)
-						.property("javafx.url", "${maven.central}org/openjfx/javafx-")
+						.property("javafx.url", "${maven.central}org/openjfx/")
 						.build();
 						
 
