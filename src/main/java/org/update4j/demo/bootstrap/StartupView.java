@@ -89,14 +89,14 @@ public class StartupView extends FXMLView implements UpdateHandler, Injectable {
 
 	@InjectSource
 	private Stage primaryStage;
-	
+
 	@InjectSource
 	private Image inverted = JavaFxDelegate.inverted;
-	
+
 	public StartupView(Configuration config, Stage primaryStage) {
 		this.config = config;
 		this.primaryStage = primaryStage;
-		
+
 		image.setImage(JavaFxDelegate.inverted);
 
 		primaryPercent = new SimpleDoubleProperty(this, "primaryPercent");

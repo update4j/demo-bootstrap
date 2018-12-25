@@ -11,15 +11,15 @@ public class TextSeparator extends FXMLView {
 	private Label text;
 	@FXML
 	private HBox box;
-	
+
 	public TextSeparator(String text) {
 		this.text.setText(text);
 	}
-	
+
 	public TextSeparator() {
 		this("");
 	}
-	
+
 	@FXML
 	private void initialize() {
 		text.visibleProperty().bind(text.textProperty().isNotEmpty());

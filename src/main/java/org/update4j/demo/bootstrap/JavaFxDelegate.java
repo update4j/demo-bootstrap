@@ -52,18 +52,17 @@ public class JavaFxDelegate extends Application implements Delegate {
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception {		
+	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setMinWidth(650);
 		primaryStage.setMinHeight(500);
 
-		
 		URL configUrl = new URL("http://docs.update4j.org/demo/business/config.xml");
 		Configuration config = null;
 		try (Reader in = new InputStreamReader(configUrl.openStream(), StandardCharsets.UTF_8)) {
 			config = Configuration.read(in);
 		} catch (IOException e) {
 			System.err.println("Could not load remote config, falling back to local.");
-			try(Reader in = Files.newBufferedReader(Paths.get("business/config.xml"))) {
+			try (Reader in = Files.newBufferedReader(Paths.get("business/config.xml"))) {
 				config = Configuration.read(in);
 			}
 		}
