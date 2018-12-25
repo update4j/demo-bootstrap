@@ -20,6 +20,7 @@
 
 .label, .button, .check-box, Text {
 	-fx-font-family: Roboto;
+	-fx-font-size: 13;
 	-fx-text-fill: #757575;
 }
 
