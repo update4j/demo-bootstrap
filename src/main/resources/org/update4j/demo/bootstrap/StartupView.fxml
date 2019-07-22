@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.SVGPath?>
 
-<fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0" type="StackPane" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="650.0" type="StackPane" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <GridPane>
          <columnConstraints>
@@ -37,7 +37,8 @@
                <rowConstraints>
                   <RowConstraints minHeight="10.0" vgrow="NEVER" />
                   <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="25.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
                   <Button id="updateButton" fx:id="update" contentDisplay="GRAPHIC_ONLY" focusTraversable="false" onAction="#updatePressed" text="Update" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
@@ -63,6 +64,10 @@
                         <Pane id="primary" fx:id="primary" maxHeight="-Infinity" prefHeight="5.0" StackPane.alignment="CENTER_LEFT" />
                      </children>
                   </StackPane>
+                  <CheckBox fx:id="slow" focusTraversable="false" mnemonicParsing="false" text="Slow download" GridPane.rowIndex="3">
+                     <padding>
+                        <Insets left="50.0" />
+                     </padding></CheckBox>
                </children>
                <GridPane.margin>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

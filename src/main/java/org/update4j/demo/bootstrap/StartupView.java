@@ -68,6 +68,9 @@ public class StartupView extends FXMLView implements UpdateHandler, Injectable {
 
 	@FXML
 	private StackPane progressContainer;
+	
+	@FXML
+	private CheckBox slow;
 
 	@FXML
 	private Button update;
@@ -233,8 +236,11 @@ public class StartupView extends FXMLView implements UpdateHandler, Injectable {
 	}
 
 	@Override
-	public void updateDownloadProgress(float frac) {
+	public void updateDownloadProgress(float frac) throws InterruptedException {
 		Platform.runLater(() -> primaryPercent.set(frac));
+		
+		if(slow.isSelected())
+			Thread.sleep(100);
 	}
 
 	@Override
